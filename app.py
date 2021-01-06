@@ -36,6 +36,7 @@ def webhook():
             #An asset can be assigned to multiple Tags in Netilion, so we iterate through the Tags:
             for instrumentation in json_instrumentations['instrumentations']:
                 instrumentation_id = instrumentation['id']
+                print('instrumentation id: ' + str(instrumentation_id))
                 tagname = instrumentation['tag']
                 get_instrumentations_threshold_url = 'https://api.netilion.endress.com/v1/instrumentations/'+ str(instrumentation_id) +'/thresholds'
                 get_threshold_response = requests.get(get_instrumentations_threshold_url, headers=headers)
@@ -47,20 +48,23 @@ def webhook():
                         for threshold in json_thresholds:
                             #we only want to do compare the "low" threshold in this example application, but of course we could expand this to the "high" threshold easily
                             if 'low' in threshold:
-                                low_threshold_value = threshold['low'] 
+                                low_threshold_value = threshold['low']
+                                print('low threshold: '+ str(low_threshold_value))
                                 low_threshold_key = threshold['key']
+                                print('low threshold key: '+ str(low_threshold_key))
                                 if low_threshold_key == value_key:
                                     if value < low_threshold_value:
                                         #this means that the real value is lower than the threshold of, so now we can get active :-)
                                         #now check whether a message was already sent out for this tag & threshold today (remember, we don't want to cause too much spam...)
-                                        send_message = False
+                                        send_message = True
                                         engine = create_engine(os.getenv('DATABASE_URL'))
                                         connection = engine.connect()
                                         today = str(date.today())
                                         task = connection.execute('select * from public.instrumentation_threshold_log where instrumentation_id='+"'"+str(instrumentation_id)+"'"+'and date='+"'"+today+"'"+'and threshold='+"'"+'low'+"'")
                                         connection.close()
                                         for row in task:
-                                            send_message = True
+                                            send_message = False
+                                            print('The low threshold is exceeded, but we have already informed once today')
                                         if send_message:
                                             #Let's send out the messages via Telegram!
                                             text_message = urllib.parse.quote('Tag ' + tagname + ' has reached low threshold. Contact your supplier here to re-order:')
@@ -71,7 +75,8 @@ def webhook():
                                             connection = engine.connect()
                                             today = str(date.today())
                                             task = connection.execute('insert into instrumentation_threshold_log(instrumentation_id, date, threshold) values (' + "'" + instrumentation_id +"'"+ ',' + "'" + today +"'"+ ',' + "'" + 'low' + "'" + ');')
-                                            connection.close()                                       
+                                            connection.close()     
+                                            print('The low threshold is exceeded, we sent the message and updated our log table')                                  
     return jsonify({"message": "Netilion Webhooks don't actually care whether we return anything, but we will anyways because if we can avoid HTTP 500 internal server errors, we should opt for that"})
 
 if __name__ == '__main__':
