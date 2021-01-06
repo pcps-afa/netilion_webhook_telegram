@@ -1,12 +1,13 @@
 import os
 import json
+import requests
 from flask import Flask, redirect, url_for, request, render_template, Response, jsonify, redirect
 
 # Declare a flask app
 app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST'])
-def newvalue():
+def webhook():
     json_obj = request.get_json(silent=True, force=True)
     print("Request:")
     print(json.dumps(json_obj, indent=4))
@@ -45,20 +46,21 @@ def newvalue():
                         low_threshold_key = threshold['key']
                         if low_threshold_key == value_key:
                             if value < low_threshold_value:
+                                return jsonify({"message": "Netilion Webhooks don't actually care whether we return anything, but we will anyways because it's a good habit."})
                                 #this means that the real value is lower than the threshold of, so now we can get active :-)
                                 #now check whether a message was already sent out for this tag & threshold today (remember, we don't want to cause too much spam...)
-                                
-                                #if not, then send out the message to Telegram and update the database with an entry to stop any future spam
 
+                                #if not, then send out the message to Telegram and update the database with an entry to stop any future spam
+    
 
 
         
             #if threshold is exceeded,then check whether a message was already sent out for this tag & threshold today
                 #if not, then send out the message to Telegram and update the database with an entry to stop any future spam
-
+    
 
     
-    return jsonify({"message": "Netilion Webhooks don't actually care whether we return anything, but we will anyways because it's a good habit."})
+    
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
