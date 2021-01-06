@@ -29,7 +29,7 @@ def webhook():
     headers={'Accept': 'application/json', 'Api-key': api_key, 'Authorization': auth_hdr}
     get_instrumentations_response = requests.get(get_asset_instrumentations_url, headers=headers)
 
-    if get_instrumentations_response.status == 204:
+    if get_instrumentations_response.status_code == 204:
         json_instrumentations = get_instrumentations_response.json()
         #An asset can be assigned to multiple Tags in Netilion, so we iterate through the Tags:
         for instrumentation in json_instrumentations['instrumentations']:
@@ -37,7 +37,7 @@ def webhook():
             tagname = instrumentation['tag']
             get_instrumentations_threshold_url = 'https://api.netilion.endress.com/v1/instrumentations/'+ str(instrumentation_id) +'/thresholds'
             get_threshold_response = requests.get(get_instrumentations_threshold_url, headers=headers)
-            if get_threshold_response.status == 204:
+            if get_threshold_response.status_code == 204:
                 json_thresholds = get_threshold_response.json()
                 #There can be multiple thresholds in Netilion, so we iterate through them.
                 for threshold in json_thresholds:
