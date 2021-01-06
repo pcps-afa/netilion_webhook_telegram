@@ -49,7 +49,7 @@ def webhook():
                     print(str(json_thresholds))
                     if json_thresholds['thresholds'] != []:
                         #There can be multiple thresholds in Netilion, so we iterate through them.
-                        for threshold in json_thresholds:
+                        for threshold in json_thresholds['thresholds']:
                             print(str(threshold))
                             #we only want to do compare the "low" threshold in this example application, but of course we could expand this to the "high" threshold easily
                             if 'low' in threshold:
