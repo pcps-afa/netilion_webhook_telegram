@@ -21,11 +21,11 @@ def webhook():
     auth_hdr = "Basic: " + b64_creds
 
     asset_id = json_obj['content']['asset']['id']
-    print('asset_id ' + asset_id)
+    print('asset_id ' + str(asset_id))
     value_key = json_obj['content']['value']['key']
-    print('value_key ' + value_key)
+    print('value_key ' + str(value_key))
     value = json_obj['content']['value']['value']
-    print('value ' + value)
+    print('value ' + str(value))
     #now we check whether the asset ID is assigned to the tag
 
     get_asset_instrumentations_url = 'https://api.netilion.endress.com/v1/assets/' + str(asset_id) + '/instrumentations?per_page=100'
