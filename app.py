@@ -58,8 +58,8 @@ def webhook():
                                 low_threshold_key = threshold['key']
                                 print('low threshold key: '+ str(low_threshold_key))
                                 if low_threshold_key == value_key:
-                                    if value < low_threshold_value:
-                                        print('the value is below the threshold')
+                                    if value <= low_threshold_value:
+                                        print('the value is below or equal to the threshold')
                                         #this means that the real value is lower than the threshold of, so now we can get active :-)
                                         #now check whether a message was already sent out for this tag & threshold today (remember, we don't want to cause too much spam...)
                                         send_message = True
