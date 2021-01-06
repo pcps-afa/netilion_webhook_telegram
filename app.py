@@ -69,6 +69,7 @@ def webhook():
                                         task = connection.execute('select * from public.instrumentation_threshold_log where instrumentation_id='+"'"+str(instrumentation_id)+"'"+'and date='+"'"+today+"'"+'and threshold='+"'"+'low'+"'")
                                         connection.close()
                                         for row in task:
+                                            #if there is one (or more, but that would be weird) entries inside the database, we set the variable to false
                                             send_message = False
                                             print('The low threshold is exceeded, but we have already informed once today')
                                         if send_message:
@@ -80,7 +81,7 @@ def webhook():
                                             #And finally update the database with an entry
                                             connection = engine.connect()
                                             today = str(date.today())
-                                            task = connection.execute('insert into instrumentation_threshold_log(instrumentation_id, date, threshold) values (' + "'" + instrumentation_id +"'"+ ',' + "'" + today +"'"+ ',' + "'" + 'low' + "'" + ');')
+                                            task = connection.execute('insert into instrumentation_threshold_log(instrumentation_id, date, threshold) values (' + "'" + str(instrumentation_id) +"'"+ ',' + "'" + today +"'"+ ',' + "'" + 'low' + "'" + ');')
                                             connection.close()     
                                             print('The low threshold is exceeded, we sent the message and updated our log table')                                  
     return jsonify({"message": "Netilion Webhooks don't actually care whether we return anything, but we will anyways because if we can avoid HTTP 500 internal server errors, we should opt for that"})
