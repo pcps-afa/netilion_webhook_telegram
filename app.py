@@ -5,7 +5,7 @@ from flask import Flask, redirect, url_for, request, render_template, Response, 
 # Declare a flask app
 app = Flask(__name__)
 
-@app.route('/newvalue', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 def newvalue():
     json_obj = request.get_json(silent=True, force=True)
     print("Request:")
