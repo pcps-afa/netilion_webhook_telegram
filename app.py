@@ -14,20 +14,22 @@ def webhook():
     json_obj = request.json
     print("Request:")
     print(json.dumps(json_obj, indent=4))
-    #first off, I need to GET the image from Netilion
-    b64_creds = os.getenv('NETILION_B64_CREDS')
-    api_key = os.getenv('NETILION_API_KEY')
-
-    auth_hdr = "Basic: " + b64_creds
-
+    
+    #Parse JSON:
     asset_id = json_obj['content']['asset']['id']
     print('asset_id ' + str(asset_id))
     value_key = json_obj['content']['value']['key']
     print('value_key ' + str(value_key))
     value = json_obj['content']['value']['value']
     print('value ' + str(value))
-    #now we check whether the asset ID is assigned to the tag
+    
 
+    #import environment variables
+    b64_creds = os.getenv('NETILION_B64_CREDS')
+    api_key = os.getenv('NETILION_API_KEY')
+    auth_hdr = "Basic: " + b64_creds
+
+    #now we check whether the asset ID is assigned to the tag
     get_asset_instrumentations_url = 'https://api.netilion.endress.com/v1/assets/' + str(asset_id) + '/instrumentations?per_page=100'
     headers={'Accept': 'application/json', 'Api-key': api_key, 'Authorization': auth_hdr}
     get_instrumentations_response = requests.get(get_asset_instrumentations_url, headers=headers)
