@@ -46,10 +46,11 @@ def webhook():
                 print('response status code of GET instrumentations/n/thresholds: ' + str(get_threshold_response.status_code))
                 if get_threshold_response.status_code == 200:
                     json_thresholds = get_threshold_response.json()
-                    
+                    print(str(json_thresholds))
                     if json_thresholds['thresholds'] != []:
                         #There can be multiple thresholds in Netilion, so we iterate through them.
                         for threshold in json_thresholds:
+                            print(str(threshold))
                             #we only want to do compare the "low" threshold in this example application, but of course we could expand this to the "high" threshold easily
                             if 'low' in threshold:
                                 low_threshold_value = threshold['low']
