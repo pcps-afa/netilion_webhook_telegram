@@ -43,6 +43,7 @@ def webhook():
                 tagname = instrumentation['tag']
                 get_instrumentations_threshold_url = 'https://api.netilion.endress.com/v1/instrumentations/'+ str(instrumentation_id) +'/thresholds'
                 get_threshold_response = requests.get(get_instrumentations_threshold_url, headers=headers)
+                print('response status code of GET instrumentations/n/thresholds: ' + str(get_threshold_response.status_code))
                 if get_threshold_response.status_code == 200:
                     json_thresholds = get_threshold_response.json()
                     
