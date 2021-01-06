@@ -31,7 +31,7 @@ def webhook():
     get_asset_instrumentations_url = 'https://api.netilion.endress.com/v1/assets/' + str(asset_id) + '/instrumentations?per_page=100'
     headers={'Accept': 'application/json', 'Api-key': api_key, 'Authorization': auth_hdr}
     get_instrumentations_response = requests.get(get_asset_instrumentations_url, headers=headers)
-    print('response status code of GET assets/n/instrumentations: 'str(get_instrumentations_response.status_code))
+    print('response status code of GET assets/n/instrumentations: ' + str(get_instrumentations_response.status_code))
     if get_instrumentations_response.status_code == 204:
         json_instrumentations = get_instrumentations_response.json()
         
