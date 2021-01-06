@@ -1,7 +1,7 @@
 import os
 import json
 import requests
-from urllib.parse import urlencode
+import urllib.parse
 from datetime import date
 from sqlalchemy import create_engine
 from flask import Flask, redirect, url_for, request, render_template, Response, jsonify, redirect
